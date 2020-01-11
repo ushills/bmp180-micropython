@@ -8,23 +8,21 @@ class Thingspeak:
         self.BASE_URL = config.BASE_URL
         self.WRITE_API_KEY = config.WRITE_API_KEY
 
-    def create_url(self, field, value):
-        url = (
-            self.BASE_URL
-            + "update?api_key="
-            + self.WRITE_API_KEY
-            + "&"
-            + field
-            + "="
-            + str(value)
-        )
+    def create_url(self, values):
+        value_string = str()
+        for value in values:
+            field = value[0]
+            value = str(value[1])
+            value_string = value_string + "&" + field + "=" + value
+
+        url = self.BASE_URL + "update?api_key=" + self.WRITE_API_KEY + value_string
         return url
 
-    def write_channel_field(self, field, value):
-        # if not wlan.isconnected():
-        #     wifi_connect()
-        print("Sending webhook for...", field, value)
-        url = self.create_url(field, value)
+    # send values list in the form
+
+    def write_channel_field(self, values):
+        print("Sending webhook for...", values)
+        url = self.create_url(values)
         _, _, host, path = url.split("/", 3)
         full_url = "GET /{} HTTP/1.1\r\nHost: {}\r\n\r\n".format(path, host).encode()
         addr = socket.getaddrinfo(host, 80)[0][-1]
@@ -33,10 +31,10 @@ class Thingspeak:
         s.connect(addr)
         print("Sending webhook...")
         s.write(full_url)
-        data = s.recv(15)
-        print(str(data, "utf8"), end="")
-        print("\n")
-        time.sleep(10)
+        # data = s.recv(15)
+        # print(str(data, "utf8"), end="")
+        # print("\n")
+        # time.sleep(10)
         s.close()
         print("socket closed")
         return full_url
