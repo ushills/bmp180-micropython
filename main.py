@@ -12,7 +12,7 @@ wlan = network.WLAN(network.STA_IF)
 
 # define outputs
 # esp LED
-ACTIVE_LED_PIN = Pin(16, Pin.OUT)
+ACTIVE_LED_PIN = Pin(2, Pin.OUT)
 ACTIVE_LED = Signal(ACTIVE_LED_PIN, invert=True)
 
 # create bmp180 instance
