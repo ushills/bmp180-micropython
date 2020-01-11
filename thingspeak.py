@@ -21,7 +21,7 @@ class Thingspeak:
     # send values list in the form
 
     def write_channel_field(self, values):
-        print("Sending webhook for...", values)
+        print("Sending webhook values\n", values)
         url = self.create_url(values)
         _, _, host, path = url.split("/", 3)
         full_url = "GET /{} HTTP/1.1\r\nHost: {}\r\n\r\n".format(path, host).encode()
@@ -31,10 +31,10 @@ class Thingspeak:
         s.connect(addr)
         print("Sending webhook...")
         s.write(full_url)
-        # data = s.recv(15)
-        # print(str(data, "utf8"), end="")
-        # print("\n")
-        # time.sleep(10)
+        data = s.recv(15)
+        print(str(data, "utf8"), end="")
+        print("\n")
+        time.sleep(2)
         s.close()
-        print("socket closed")
+        print("socket connection closed.\n" + "-"*20)
         return full_url

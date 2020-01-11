@@ -25,11 +25,19 @@ thingspeak = Thingspeak()
 if __name__ == "__main__":
 
     # delay to allow network to connect
-    time.sleep(10)
     wlan.connect()
+    time.sleep(10)
 
     if wlan.isconnected():
-        wlan.ifconfig()
+        print("WiFi Connected")
+        print(wlan.ifconfig())
+    elif not wlan.isconnected():
+        ssid = input("SSID:")
+        password = input("Password:")
+        wlan.connect(ssid, password)
+        while not wlan.isconnected():
+            pass
+        print('network config:', wlan.ifconfig())
 
     print("Running main routine")
     while True:
